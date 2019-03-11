@@ -1,10 +1,15 @@
 #!/usr/bin/python
+from random import randint
 
-def getSamples():
+def getSamples(num=99999999):
     samples = []
+    c = 0
     with open('30000_samples.txt', 'r') as f:
         l = f.readline()
-        while l:
+        for i in range(randint(0, 30000-num)):
+            l = f.readline()
+        while l and (c < num):
+            c += 1
             l = l.strip().strip(';').split(', ')
             s = {
                 'plain': [int(n) for n in l[0].split(' ')],
@@ -55,7 +60,8 @@ def decideBit(key_so_far, samples, i=0, kb=0):
 
 
 
-samples = getSamples()
+samples = getSamples(15000)
+print len(samples)
 
 key = []
 for i in range(128):
@@ -64,12 +70,13 @@ for i in range(128):
 #     decideBit(key, samples, i=j)
 # from IPython import embed; embed()
 
-print key
+# print key
 
 from aes import AES
 aes = AES()
 
 key = bitsToBytes(key)
+print key
 m = samples[0]['plain']
 cipher = aes.encrypt(m, key, 16)
 print cipher
