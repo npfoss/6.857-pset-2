@@ -18,6 +18,9 @@ def getSamples():
             l = f.readline()
     return samples
 
+def bitsToBytes(l):
+    return [ int(''.join([str(l[i*8 + j]) for j in range(8)]), 2) for i in range(16)]
+
 def decideBit(key_so_far, samples, i=0, kb=0):
     """
     if the current bit of the input is 0, high means key is 1
@@ -32,24 +35,39 @@ def decideBit(key_so_far, samples, i=0, kb=0):
     print 'thresh', thresh
 
     for keybit in range(1):
-        total = 0
+        total0 = 0
+        c0 = 0
+        t1 = 0
+        c1 = 0
         for s in samples:
-            total += s['leak'] - (keybit ^ s['plain_bits'][i]) * 3.0 / 8
+            if not s['plain_bits'][i]:
+                total0 += s['leak']
+                c0 += 1
+            else:
+                t1 += s['leak']
+                c1 += 1
+            # total += s['leak'] - (keybit ^ s['plain_bits'][i]) * 3.0 / 8
 
-        print 'actual', total #- n / 2.0 * 3 / 8
+        # print 'actual', total #- n / 2.0 * 3 / 8
+        print 'actual', 1.0*total0/c0 #- n / 2.0 * 3 / 8
+        print 'actual', 1.0*t1/c1 #- n / 2.0 * 3 / 8
+        return int(1.0*total0/c0 > 1.0*t1/c1)
+
 
 
 samples = getSamples()
 
 key = []
-# for i in range(128):
-#     key.append(decideBit(key, samples))
-for j in range(20):
-    decideBit(key, samples, i=j)
+for i in range(128):
+    key.append(decideBit(key, samples, i))
+# for j in range(20):
+#     decideBit(key, samples, i=j)
 # from IPython import embed; embed()
 
-'''
+print key
+
 from aes import AES
+aes = AES()
 
 key = bitsToBytes(key)
 m = samples[0]['plain']
@@ -57,4 +75,3 @@ cipher = aes.encrypt(m, key, 16)
 print cipher
 print samples[0]['cipher']
 
-'''
