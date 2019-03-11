@@ -19,7 +19,7 @@ def getSamples():
     return samples
 
 def bitsToBytes(l):
-    return [ int(''.join([str(l[i*8 + j]) for j in range(8)]), 2) for i in range(16)]
+    return [ int(''.join([str(l[i*8 + 7 - j]) for j in range(8)]), 2) for i in range(16)]
 
 def decideBit(key_so_far, samples, i=0, kb=0):
     """
