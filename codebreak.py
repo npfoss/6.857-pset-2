@@ -30,9 +30,9 @@ def decideBit(key_so_far, samples, i=0, kb=0):
     t = 1407 - len(key_so_far)
     thresh = n * t / 8.0 - n / 4.0
     keybit = kb
-    print 'expected low ', n * t / 8.0 - 3 * n / 8.0
-    print 'expected high', n * t / 8.0 - n / 8.0
-    print 'thresh', thresh
+    # print 'expected low ', n * t / 8.0 - 3 * n / 8.0
+    # print 'expected high', n * t / 8.0 - n / 8.0
+    # print 'thresh', thresh
 
     for keybit in range(1):
         total0 = 0
@@ -49,8 +49,8 @@ def decideBit(key_so_far, samples, i=0, kb=0):
             # total += s['leak'] - (keybit ^ s['plain_bits'][i]) * 3.0 / 8
 
         # print 'actual', total #- n / 2.0 * 3 / 8
-        print 'actual', 1.0*total0/c0 #- n / 2.0 * 3 / 8
-        print 'actual', 1.0*t1/c1 #- n / 2.0 * 3 / 8
+        # print 'actual', 1.0*total0/c0 #- n / 2.0 * 3 / 8
+        # print 'actual', 1.0*t1/c1 #- n / 2.0 * 3 / 8
         return int(1.0*total0/c0 > 1.0*t1/c1)
 
 
