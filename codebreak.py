@@ -36,21 +36,23 @@ def decideBit(key_so_far, samples, i=0, kb=0):
         for s in samples:
             total += s['leak'] - (keybit ^ s['plain_bits'][i]) * 3.0 / 8
 
-        print 'actual', total
+        print 'actual', total #- n / 2.0 * 3 / 8
 
 
 samples = getSamples()
 
 key = []
 # for i in range(128):
-key.append(decideBit(key, samples))
-from IPython import embed; embed()
+#     key.append(decideBit(key, samples))
+for j in range(20):
+    decideBit(key, samples, i=j)
+# from IPython import embed; embed()
 
 '''
 from aes import AES
 
 key = bitsToBytes(key)
-m = map(ord, samples[0]['plain'])
+m = samples[0]['plain']
 cipher = aes.encrypt(m, key, 16)
 print cipher
 print samples[0]['cipher']
